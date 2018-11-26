@@ -1,10 +1,10 @@
 <template>
   <div class="Input-group">
-    <input
+    <input class="Input-group-inputField"
       v-bind:placeholder="placeholder"
       v-on:change="onInputChange"
       v-model="value"
-      type="text"
+      type="inputType"
       name="name"
       />
 	<p></p>
@@ -22,6 +22,7 @@ export default {
 	props: {
 		placeholder: String,
 		name: String,
+        inputType: String,
 	},
     methods: {
         onInputChange: function () {

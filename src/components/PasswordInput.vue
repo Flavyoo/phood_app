@@ -1,3 +1,12 @@
+<!--
+
+A Password input component. This is different from the generic input
+even though they share many of the same features.
+However, this component can have its own validation along with error messages
+when needed.
+
+-->
+
 <template>
   <div class="Input-group">
     <input

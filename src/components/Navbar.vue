@@ -6,10 +6,18 @@
           <p class="Navbar-brandIcon-header">Phood</p>
         </div>
       </router-link>
+      <router-link v-if="authenticated" class="Navbar-link" to="/account">
+          {{ givenName }}
+      </router-link>
       <router-link class="Navbar-link Navbar-link-active" to="/">Home</router-link>
       <router-link class="Navbar-link" to="/product">Product</router-link>
       <router-link class="Navbar-link" to="/about">About</router-link>
-      <router-link class="Navbar-link" to="/logout">Logout</router-link>
+      <a href="#"
+                  class="Navbar-link"
+                  @click.prevent="logout"
+                  v-if="authenticated">
+                  Logout
+      </a>
       <router-link class="Navbar-link" to="/contact">Contact</router-link>
     </div>
   </div>
@@ -17,7 +25,37 @@
 
 <script>
 export default {
-  name: 'Navbar'
+  name: 'Navbar',
+  created () {
+    this.isAuthenticated()
+  },
+  watch: {
+    // Everytime the route changes, check for auth status
+    '$route': 'isAuthenticated'
+  },
+  computed: {
+      authenticated() {
+          return this.$store.getters.isAuthenticated
+      },
+      givenName() {
+          return this.$store.getters.getGivenName
+      }
+  },
+  methods: {
+    async logout () {
+      await this.$auth.logout()
+      await this.isAuthenticated()
+      this.$store.dispatch('logout')
+      // Navigate back to home
+      this.$router.push({ path: '/' })
+     },
+    async isAuthenticated () {
+      const payload = {
+          isLoggedIn: await this.$auth.isAuthenticated(),
+      }
+      this.$store.dispatch('authenticate', payload)
+    },
+  }
 }
 </script>
 

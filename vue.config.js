@@ -5,5 +5,5 @@ module.exports = {
 	loaderOptions: {
       // options for the sass loader
     }
-  }
+  },
 }
