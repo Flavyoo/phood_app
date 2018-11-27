@@ -6,8 +6,13 @@
           <p class="Navbar-brandIcon-header">Phood</p>
         </div>
       </router-link>
-      <router-link v-if="authenticated" class="Navbar-link" to="/account">
-          {{ givenName }}
+      <router-link v-if="authenticated"
+                   class="Navbar-link"
+                   to="/account">
+                   {{ givenName }}
+      </router-link>
+      <router-link v-else class="Navbar-link" to="/account">
+          Account
       </router-link>
       <router-link class="Navbar-link Navbar-link-active" to="/">Home</router-link>
       <router-link class="Navbar-link" to="/product">Product</router-link>
@@ -18,7 +23,6 @@
                   v-if="authenticated">
                   Logout
       </a>
-      <router-link class="Navbar-link" to="/contact">Contact</router-link>
     </div>
   </div>
 </template>
@@ -62,7 +66,7 @@ export default {
 <style scoped lang="scss">
 .Navbar {
     overflow: hidden;
-    background-color: #192BC2;
+    background-color: $PERSIAN_BLUE;
     max-width: 2000px;
     margin: 0 auto;
 }
@@ -70,7 +74,7 @@ export default {
     &-wrapper {
         width: 100%;
         overflow: hidden;
-        background-color: #192BC2;
+        background-color: $PERSIAN_BLUE;
         height: 80px;
     }
     &-brandIcon {

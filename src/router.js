@@ -32,7 +32,7 @@ let router = new Router({
       name: 'Account',
       component: Account,
       meta: {
-        requiresAuth: true
+          requiresAuth: true
       }
     },
     {
@@ -46,6 +46,19 @@ let router = new Router({
   ]
 })
 
-router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
+/*
+ * This nagivation gaurd checks if a user is authenticated before
+ * they can visit a certain route. If they are not, it sends them to the login
+ * view.
+ */
+router.beforeEach(async (to, from, next) => {
+    if (to.matched.some( record => record.meta.requiresAuth)
+        && !(await Vue.prototype.$auth.isAuthenticated()))
+    {
+         next({ path: '/login' })
+    } else {
+        next()
+    }
+})
 
 export default router;
