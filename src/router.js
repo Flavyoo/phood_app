@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from '@/views/Home.vue'
+import LoginView from '@/views/LoginView.vue'
 import Auth from '@okta/okta-vue'
 import Account from '@/components/Account'
 import {CLIENT_ID, REDIRECT_URI, SCOPE} from './consts'
@@ -24,12 +25,17 @@ let router = new Router({
       component: Home
     },
     {
+      path: '/login',
+      name: 'login-view',
+      component: LoginView
+    },
+    {
       path: '/implicit/callback',
       component: Auth.handleCallback()
     },
     {
       path: '/account',
-      name: 'Account',
+      name: 'account',
       component: Account,
       meta: {
           requiresAuth: true

@@ -60,17 +60,24 @@ export default {
         GenericInput,
         PasswordInput,
     },
+    props: {
+        isSigningUp: Boolean,
+        loginHeader: String
+    },
     data () {
         return {
             email: '',
             username: '',
             password: '',
-            signingUp: false,
+            signingUp: this.isSigningUp,
             loginSignUpText: 'Sign Up',
             accountStanding: "Don't have an account?",
-            formHeader: 'Welcome',
+            formHeader: this.loginHeader,
             errorMessage: ''
         }
+    },
+    mounted: function () {
+        this.formHeader = this.signingUp ? "Get Started" : this.loginHeader;
     },
     methods: {
         onGetInputValue: function (value) {
@@ -88,7 +95,7 @@ export default {
             this.accountStanding = this.signingUp
                                    ? "Already have an account?"
                                    : "Dont have an account?";
-            this.formHeader = !this.signingUp ? "Welcome" : "Get Started";
+            this.formHeader = !this.signingUp ? this.loginHeader : "Get Started";
         },
         handleLogin: function () {
             // Make a request to the Okta API to sign the user in.
