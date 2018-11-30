@@ -19,13 +19,30 @@ export default {
 							display: true
 						}
 					}],
+				},
+				title: {
+					display: true,
+					text: "Check It Out!!",
+					fontSize: 26,
+					fontFamily: "'Roboto', sans-serif"
+				},
+				tooltips: {
+					callbacks: {
+						afterTitle: function(tooltipItem) {
+							if (tooltipItem[0].xLabel !== 'Savings') {
+								return "Percent"
+							} else {
+								return "In thousands"
+							}
+						}
+					}
 				}
 			},
 		}
 	},
 	mounted () {
 		this.renderChart({
-			labels: ['Waste (Percent)', 'Savings (Thousands)', 'Donations (Percent)'],
+			labels: ['Waste Reduced', 'Savings', 'Donations'],
 			datasets: [
 				{
 					label: "Phood's Impact",
