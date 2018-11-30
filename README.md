@@ -24,6 +24,8 @@ npm run test
 ```
 npm run lint
 ```
+### User Authentication
+I used the Okta API to implement user authentication, loggin in, and loggin out.
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
