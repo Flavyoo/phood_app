@@ -1,11 +1,16 @@
 <template>
 	<div class="VerticalSideNavbar">
-		<p>Welcome</p>
+		<ItemChart/>
 	</div>
 </template>
 
 <script>
+import ItemChart from '@/components/DisposedItemChart'
+
 export default {
-  name: 'VerticalSideNavbar'
+	name: 'VerticalSideNavbar',
+	components: {
+		ItemChart
+	}
 }
 </script>

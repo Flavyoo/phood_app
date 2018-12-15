@@ -1,12 +1,13 @@
 <template>
-	<div class="container-fluid mt-4">
+	<div class="Account container-fluid mt-4">
+		<h1>Disposed Items</h1>
 		<div class="row">
-			<div class="col-md-3">
+			<div class="Account-sidebarContainer col-md-3">
 				<VerticalSideNavbar/>
 			</div>
-			<div class="col-md-6">
-				<ul class="Item-listConatiner">
-					<li v-for=" item in disposedItems" :key="item.id">
+			<div class="Account-mainDisplay col-md-6">
+				<ul class="Account-itemList">
+					<li class="Account-itemList-item" v-for=" item in disposedItems" :key="item.id">
 						<ItemCard
 							v-bind:itemSubtitle="itemSubtitle(item.company, item.facility)"
 							v-bind:otherInfo="getItemWeight(item.currentWeightRecorded)"
@@ -17,7 +18,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="col-md-3">
+			<div class="Account-createItemFormContainer col-md-3">
 				<b-card :title="(currentItem.id ? 'Edit Item ID: ' + currentItem.id : 'Add Item')">
 					<form @submit.prevent="saveItem">
 						<b-form-group label="Title">
@@ -106,3 +107,20 @@ export default {
 	}
 }
 </script>
+
+<style scoped lang="scss">
+.Account {
+	&-mainDisplay {
+		padding: 0;
+		margin: 0;
+	}
+	&-itemList {
+		margin: 0;
+		padding: 0;
+		&-item {
+			list-style-type: none;
+			margin: 20px 0 0 20px;
+		}
+	}
+}
+</style>

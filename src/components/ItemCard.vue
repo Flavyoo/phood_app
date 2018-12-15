@@ -1,5 +1,5 @@
 <template>
-	<div class="card" style="width: 36rem;">
+	<div class="ItemCard card" style="width: 36rem;">
 		<div class="card-body">
 			<h5 class="card-title">
 				<b>Name</b>: {{ item.name }}
@@ -29,3 +29,13 @@ export default {
 	}
 }
 </script>
+
+<style scoped lang="scss">
+.ItemCard {
+	box-shadow: 0 14px 28px rgba(0,0,0,0.20), 0 10px 10px rgba(0,0,0,0.22);
+	border-radius: 10px;
+	&:last-child {
+		margin-bottom: 20px;
+	}
+}
+</style>
