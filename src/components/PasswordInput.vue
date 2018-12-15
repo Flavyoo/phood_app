@@ -34,7 +34,7 @@ export default {
         errorMessage: String,
 		placeholder: String,
 		name: String,
-        notValid: Boolean,
+        notValid: Boolean
 	},
     methods: {
         onInputChange: function () {

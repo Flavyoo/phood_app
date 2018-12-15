@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import LoginView from '@/views/LoginView.vue'
 import Auth from '@okta/okta-vue'
-import Account from '@/components/Account'
+import UserAccount from '@/views/Account'
 import {CLIENT_ID, REDIRECT_URI, SCOPE} from './consts'
 
 Vue.use(Auth, {
@@ -36,7 +36,7 @@ let router = new Router({
     {
       path: '/account',
       name: 'account',
-      component: Account,
+      component: UserAccount,
       meta: {
           requiresAuth: true
       }
