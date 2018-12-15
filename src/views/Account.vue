@@ -8,18 +8,17 @@
 				<ul class="Item-listConatiner">
 					<li v-for=" item in disposedItems" :key="item.id">
 						<ItemCard
-							itemTitle="item.name"
-							itemDescription="item.description"
-							itemSubtitle="itemSubtitle(item.company, item.facility)"
-							otherInfo="getItemWeight(item.currentWeightRecorded)"
-							onDelete="deleteItem(item.id)"
-							onEdit="saveItem(item)"
+							v-bind:itemSubtitle="itemSubtitle(item.company, item.facility)"
+							v-bind:otherInfo="getItemWeight(item.currentWeightRecorded)"
+							v-bind:item="item"
+							@editItem="populateItemData"
+							@deleteItem="deleteDisposedItem"
 						/>
 					</li>
 				</ul>
 			</div>
 			<div class="col-md-3">
-				<b-card :title="(currentItem.id ? 'Edit Item ID#' + currentItem.id : 'Add Item')">
+				<b-card :title="(currentItem.id ? 'Edit Item ID: ' + currentItem.id : 'Add Item')">
 					<form @submit.prevent="saveItem">
 						<b-form-group label="Title">
 							<b-form-input type="text" v-model="currentItem.name"></b-form-input>
@@ -49,25 +48,60 @@
 <script>
 import VerticalSideNavbar from '@/components/VerticalSideNavbar'
 import ItemCard from '@/components/ItemCard'
+import API from '@/api'
+
 export default {
     name: "Account",
 	data () {
 		return {
 			unit: "lbs",
-			currentItem: {}
+			currentItem: {},
+			disposedItems: [],
+			loading: false
 		}
 	},
     components: {
         VerticalSideNavbar,
 		ItemCard
     },
+	async created () {
+		this.refreshItems()
+	},
 	methods: {
-		// concats two values together
 		itemSubtitle: function(value1, value2) {
 			return value1 + ": " + value2
 		},
 		getItemWeight: function(weight) {
 			return `Total Weight: ${weight} ${this.unit}`
+		},
+		async refreshItems() {
+			this.loading = true
+			this.disposedItems = await API.getDisposedItems()
+			this.loading = false
+		},
+		async populateItemData(item) {
+			this.currentItem = Object.assign({}, item)
+		},
+		async saveItem() {
+			/*
+			 * Check if there is a current item,
+			 * and call the udpate method with the model id and model.
+			 */
+			if (this.currentItem.id) {
+				await API.updateDisposedItem(this.currentItem.id, this.currentItem)
+			} else {
+				await API.createDisposedItem(this.currentItem)
+			}
+			// reset the form values
+			this.currentItem = {}
+			await this.refreshItems()
+		},
+		async deleteDisposedItem(itemId) {
+			if (this.currentItem.id === itemId) {
+				this.model = {}
+			}
+			await API.deleteDisposeditem(itemId)
+			await this.refreshItems()
 		}
 	}
 }
