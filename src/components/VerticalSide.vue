@@ -1,5 +1,5 @@
 <template>
-	<div class="VerticalSideNavbar">
+	<div class="VerticalSide">
 		<ItemChart/>
 	</div>
 </template>

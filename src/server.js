@@ -79,7 +79,10 @@ const DisposedItemCategory = database.define('disposedItemCategory', {
      through: 'DisposedItemCategoryConnection'
  })
 
-
+// epilogue will handles things like creating, listing, updating,
+// and deleting models, since it creates controllers for these.
+// this allows the client to make calls to the endpoints and have the
+// controller perform the respective action.
 epilogue.initialize({
   app: app,
   sequelize: database

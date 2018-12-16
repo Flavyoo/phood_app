@@ -23,6 +23,7 @@
           placeholder="password"
           name="password"
           v-on:get-value="onGetPasswordValue"
+          v-bind:errorMessage="passwordErrorMessage"
         />
         <button v-if="signingUp" class="LoginForm-submitButton"
                 name="signUpButton"
@@ -70,10 +71,11 @@ export default {
             username: '',
             password: '',
             signingUp: this.isSigningUp,
-            loginSignUpText: 'Sign Up',
+            loginSignUpText: 'Login',
             accountStanding: "Don't have an account?",
             formHeader: this.loginHeader,
-            errorMessage: ''
+            errorMessage: '',
+            passwordErrorMessage: ''
         }
     },
     mounted: function () {
@@ -84,7 +86,12 @@ export default {
             this.username = value;
         },
         onGetPasswordValue: function (value) {
-            this.password = value;
+            if (value.length >= 8) {
+                this.password = value;
+                this.passwordErrorMessage = ''
+            } else {
+                this.passwordErrorMessage = 'Password must be longer 7 characters.'
+            }
         },
         onGetEmailValue: function (value) {
             this.email = value;

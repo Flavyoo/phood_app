@@ -16,7 +16,7 @@ when needed.
       v-on:change="onInputChange"
       name="name"
       />
-      <p class="Input-goup-error" v-if="notValid">
+      <p class="Input-group-error password-error" v-if="notValid">
         {{ errorMessage }}
       </p>
     </div>
@@ -28,17 +28,24 @@ export default {
 	data () {
 		return {
 			value: '',
+            passwordErrorMessage: this.errorMessage
 		}
 	},
 	props: {
         errorMessage: String,
 		placeholder: String,
 		name: String,
-        notValid: Boolean
 	},
     methods: {
         onInputChange: function () {
             this.$emit('get-value', this.value);
+        },
+        notValid: function() {
+            if (this.passwordErrorMessage) {
+                this.notValid = true
+            } else {
+                this.notValid = false
+            }
         }
     }
 }

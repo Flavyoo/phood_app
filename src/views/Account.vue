@@ -3,7 +3,7 @@
 		<h1>Disposed Items</h1>
 		<div class="row">
 			<div class="Account-sidebarContainer col-md-3">
-				<VerticalSideNavbar/>
+				<VerticalSide/>
 			</div>
 			<div class="Account-mainDisplay col-md-6">
 				<ul class="Account-itemList">
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import VerticalSideNavbar from '@/components/VerticalSideNavbar'
+import VerticalSide from '@/components/VerticalSide'
 import ItemCard from '@/components/ItemCard'
 import API from '@/api'
 
@@ -58,11 +58,10 @@ export default {
 			unit: "lbs",
 			currentItem: {},
 			disposedItems: [],
-			loading: false
 		}
 	},
     components: {
-        VerticalSideNavbar,
+        VerticalSide,
 		ItemCard
     },
 	async created () {
