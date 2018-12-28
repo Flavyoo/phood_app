@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base href="/">
+        <meta charset="UTF-8">
+        <title>Phood</title>
+
+        <link rel="shortcut icon" href="https://assets.phoodsolutions.com/dashboard/images/Dashboard_Favicon_Scale.png">
+
+        <!-- Temporary Style Links (Refactor these out in the future) -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,300,700">
+        <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Raleway:400,200'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+        <!-- External Styles (Find a way to bundle these properly) -->
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/angular-xeditable/0.8.1/css/xeditable.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.7/angular-material.min.css">
+
+        <!-- Code Bundles -->
+        <script src="./bundles/manifest.bundle.js"></script>
+        <script src="./bundles/vendor.bundle.js"></script>
+        <script src="./bundles/app.bundle.js"></script>
+
+        <!-- External Libraries (Find a way to bundle these properly) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-xeditable/0.8.1/js/xeditable.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.1.1/angular-chart.min.js"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0yltE2Dk_c2Y2Cei6qggc-8HlAe9A-mU&extension=.js">
+        </script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+        <!-- TODO: The below is only needed for pagination. Find an alternative so we don't need all of bootstrap just for this -->
+        <!--<script src="app/assets/js/ui-bootstrap-tpls-0.12.1.min.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js"></script>
+
+        <!-- Refactor the below to be used with angular -->
+        <script>
+            (function(i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function() {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        </script>
+
+        <!-- Injected System Values -->
+        <script>
+            const VERSION = "$version$";
+            const API_URL = "$api_url$";
+
+            // If we have a new version for the front-end, force a reload with a refreshed cache
+            const localVersion = localStorage.getItem('version');
+            if (localVersion !== VERSION) {
+                localStorage.setItem('version', VERSION);
+                location.reload(true);
+            }
+        </script>
+    </head>
+
+    <body ng-app="PhoodWeb" ng-cloak ng-controller="appCtrl" ng-init="init()" layout="row">
+        <phood-navbar ng-show="!isLogin"></phood-navbar>
+        <div ui-view class="app-content"></div>
+    </body>
+</html>

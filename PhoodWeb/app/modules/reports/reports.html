@@ -1,0 +1,162 @@
+<div class="ng-cloak reports-container" ng-init="init()">
+    <div class="reports-filter-container">
+        <md-input-container class="reports-filter">
+            <label hide-sm hide-xs>Start Date</label>
+            <md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+        </md-input-container>
+
+        <md-input-container class="reports-filter">
+            <label hide-sm hide-xs>End Date</label>
+            <md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
+        </md-input-container>
+
+        <md-input-container class="reports-filter report-location-filter" ng-show="canViewMultipleOrganizations">
+            <label hide-sm hide-xs>Organizations</label>
+
+            <md-select ng-model="selectedOrganizations" multiple>
+                <md-optgroup label="Organizations">
+                    <md-option ng-value="organization.name" ng-repeat="organization in organizations">{{organization.name}}</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container class="reports-filter report-location-filter">
+            <label hide-sm hide-xs>Locations</label>
+
+            <md-select ng-model="selectedLocations" multiple>
+                <md-optgroup label="Locations">
+                    <md-option ng-value="location.name" ng-repeat="location in locations">{{location.name}}</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div ng-show="isPreConsumer">
+        <md-button ng-class="computeReportCategorySelectClass(false)" ng-click="showItemSummary(false)">General Reports</md-button>
+        <md-button ng-class="computeReportCategorySelectClass(true)" ng-click="showItemSummary(true)">Item Breakout</md-button>
+    </div>
+
+    <div ng-show="!showIndividualItemSummaries" class="reports">
+        <md-button aria-label="Top Wasted" ng-class="computeSelectedReportClass(1)" ng-show="isPreConsumer && showCost" ng-click="showReport(false, 1)">Items ($)</md-button>
+        <md-button aria-label="Top Wasted" ng-class="computeSelectedReportClass(2)" ng-show="isPreConsumer" ng-click="showReport(false, 2)">Items (LBS)</md-button>
+        <md-button aria-label="Waste Over Time" ng-class="computeSelectedReportClass(3)" ng-click="showReport(false, 3)">Timeline</md-button>
+        <md-button aria-label="Waste by Day" ng-class="computeSelectedReportClass(4)" ng-click="showReport(false, 4)">Day</md-button>
+        <md-button aria-label="Waste by Reason" ng-class="computeSelectedReportClass(5)" ng-show="isPreConsumer" ng-click="showReport(false, 5)">Reason</md-button>
+        <md-button aria-label="Action Breakout" ng-class="computeSelectedReportClass(6)" ng-show="isPreConsumer" ng-click="showReport(false, 6)">Action</md-button>
+
+        <div ng-if="(loadingState == 'Ready')" class="report-container">
+            <canvas id="topWastedItemsByValue"
+                    class="chart chart-bar"
+                    chart-data="topWastedItemByValueData"
+                    chart-labels="topWastedItemByValueLabels"
+                    chart-options="topWastedItemByValueOptions"
+                    ng-show="curReport == 1">
+            </canvas>
+
+            <canvas id="topWastedItems"
+                    class="chart chart-bar"
+                    chart-data="topWastedItemData"
+                    chart-labels="topWastedItemLabels"
+                    chart-options="topWastedItemOptions"
+                    ng-show="curReport == 2">
+            </canvas>
+
+            <canvas id="wasteOverTime"
+                    class="chart chart-line"
+                    chart-data="wasteOverTimeData"
+                    chart-labels="wasteOverTimeLabels"
+                    chart-series="wasteOverTimeSeries"
+                    chart-options="wasteOverTimeOptions"
+                    chart-dataset-override="datasetOverride"
+                    ng-show="curReport == 3">
+            </canvas>
+
+            <canvas id="wasteByDay"
+                    class="chart chart-line"
+                    chart-data="wasteByDayData"
+                    chart-labels="wasteByDayLabels"
+                    chart-options="wasteByDayOptions"
+                    ng-show="curReport == 4">
+            </canvas>
+
+            <canvas id="reasons"
+                    class="chart chart-doughnut"
+                    chart-options="reasonOptions"
+                    chart-data="reasonData"
+                    chart-labels="reasonLabels"
+                    ng-show="curReport == 5">
+            </canvas>
+
+            <canvas id="actions"
+                    class="chart chart-doughnut"
+                    chart-options="actionOptions"
+                    chart-data="actionData"
+                    chart-labels="actionLabels"
+                    ng-show="curReport == 6">
+            </canvas>
+        </div>
+    </div>
+
+    <div ng-show="showIndividualItemSummaries" class="item-reports">
+        <div layout="row" ng-if="(loadingState == 'Ready')">
+            <div layout="column" flex="25">
+                <md-input-container class="search-item-container">
+                    <label>Search Item</label>
+                    <input type="text" id="query" ng-model="currentItemSearch"/>
+                </md-input-container>
+
+                <md-list class="max-height-400">
+                    <!-- TODO: Rewrite the max-height-400 class-->
+                    <md-list-item ng-repeat="item in topWastedItems | filter:currentItemSearch" ng-click="searchItem(item.itemName)" ng-class="computeSelectedItemClass(item.itemName)">
+                        <div class="md-list-item-text">
+                            <h3>{{ item.itemName }}</h3>
+                            <p>{{ item.quantity }} LBS</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </div>
+
+            <div layout="column" flex>
+                <div layout="row">
+                    <md-button aria-label="Waste Over Time" ng-class="computeItemReportClass(1)" ng-click="showReport(true, 1)">Timeline</md-button>
+                    <md-button aria-label="Average Waste by Day" ng-class="computeItemReportClass(2)" ng-click="showReport(true, 2)">Day</md-button>
+                    <md-button aria-label="Waste by Action" ng-class="computeItemReportClass(3)" ng-click="showReport(true, 3)">Reason</md-button>
+                </div>
+
+                <div layout="row" flex>
+                    <canvas id="itemWasteOverTime"
+                            class="chart chart-line"
+                            chart-data="itemWasteOverTimeData"
+                            chart-labels="itemWasteOverTimeLabels"
+                            chart-options="itemWasteOverTimeOptions"
+                            ng-show="curItemReport == 1">
+                    </canvas>
+
+                    <canvas id="itemWasteByDay"
+                            class="chart chart-line"
+                            chart-data="itemWasteByDayData"
+                            chart-labels="itemWasteByDayLabels"
+                            chart-options="itemWasteByDayOptions"
+                            ng-show="curItemReport == 2">
+                    </canvas>
+
+                    <canvas id="itemReasons"
+                            class="chart chart-doughnut"
+                            chart-options="itemReasonOptions"
+                            chart-data="itemReasonData"
+                            chart-labels="itemReasonLabels"
+                            ng-show="curItemReport == 3">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div ng-if="(loadingState == 'Loading')">
+        <phood-loader></phood-loader>
+    </div>
+    <div ng-if="(loadingState == 'Error')">
+        An error has occurred while retrieving report data.
+    </div>
+ </div>

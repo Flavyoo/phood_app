@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="app/modules/logs/confirm-delete-dialog.css">
+
+<md-dialog class="confirm-delete-dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools phood-blue-no-hover">
+            <h2>Confirm</h2>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content confirm-delete-confirmation-message">
+            <h3>Are you sure you want to delete this log?</h3>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row" class="confirm-delete-actions">
+        <md-button class="phood-blue confirm" ng-click="deleteFoodLog()">
+            Yes
+        </md-button>
+        <span flex></span>
+        <md-button class="phood-gray cancel" ng-click="cancel()">
+            No
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

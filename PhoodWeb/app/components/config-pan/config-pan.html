@@ -1,0 +1,26 @@
+<div layout-padding ng-init="init()">
+	<md-button aria-label="Add Pan" class="phood-blue" ng-click="showAddPanCard()">Add Pan</md-button>
+
+	<new-pan-card organization-id="selectedOrganization.id" ng-show="isAddPanCardEnabled"></new-pan-card>
+
+	<table class="table table-striped table-hover table-bordered">
+		<thead>
+			<tr>
+				<th>Pan Name</th>
+				<th>Weight</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<div ng-if="(loadingState == 'Ready')">
+				<tr ng-repeat="obj in panList" class="ng-cloak">
+					<td><a href="#" editable-text="obj.name" onaftersave="editPan(obj)">{{obj.name || 'empty'}}</a></td>
+					<td><a href="#" editable-number="obj.weightQuantity" e-step="any" onaftersave="editPan(obj)">{{obj.weightQuantity || 0}}</a></td>
+					<td>
+						<md-button data-ng-click="deletePan(obj)" class="md-fab md-mini phood-red">X</md-button>
+					</td>
+				</tr>
+			</div>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,96 @@
+<div class="ng-cloak zero-waste-container">
+    <ul class="nav nav-pills">
+        <li>
+            <a ui-sref="logs" class="log-pill">Waste Logs</a>
+        </li>
+        <li class="active">
+            <a ui-sref="zeroWaste" class="log-pill">Shortage Logs (Beta)</a>
+        </li>
+    </ul>
+
+    <!-- Waste Controller -->
+    <div id="zeroWasteLogs" class="tab-pane fade in" ng-init="init()">
+        <h3>Shortages (Past 3 Weeks)</h3>
+
+        <div ng-if="admin">
+            Organization Selection:
+            <select ng-model="selectedOrganization.organizationName"
+                    ng-options="organization for organization in organizationList">
+            </select>
+        </div>
+
+        <div ng-if="director || admin">
+            Location Selection:
+            <select ng-model="selectedLocation.locationName" ng-options="location for location in locationList">
+            </select>
+        </div>
+
+        <pagination
+                total-items="totalItems"
+                ng-model="currentPage"
+                max-size="20"
+                items-per-page="numPerPage"
+                page="currentPage"
+                boundary-links="true"
+                class="pagination-sm">
+        </pagination>
+
+        <table class="table table-striped table-hover table-bordered log-table">
+            <col width="50%">
+            <col width="10%">
+            <col width="10%">
+            <col width="30%">
+            <thead>
+                <tr>
+                    <th class="table-header">
+                        Item
+                    </th>
+                    <th class="table-header">
+                        Days Wasted
+                    </th>
+                    <th class="table-header">
+                        Days Not Wasted
+                    </th>
+                    <th class="table-header" colspan="3">
+                        Quantity Wasted
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <div ng-if="(loadingState == 'Ready')">
+                    <tr ng-repeat="item in wasteData | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
+                        <td>{{item.itemName}}</td>
+                        <td>{{item.daysWasted}}</td>
+                        <td>{{item.daysNotWasted}}</td>
+                        <td>
+                    <span ng-show="item.pounds">
+                        Pounds: {{item.pounds}}
+                    </span>
+                            <span ng-show="(item.pounds && (item.portions || item.each))">
+                        &nbsp; | &nbsp;
+                    </span>
+                            <span ng-show="item.portions">
+                        Portions: {{item.portions}}
+                    </span>
+                            <span ng-show="(item.portions && item.each)">
+                        &nbsp; | &nbsp;
+                    </span>
+                            <span ng-show="item.each">
+                        Each: {{item.each}}
+                    </span>
+                        </td>
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+        <div ng-if="(loadingState == 'Loading')">
+            <phood-loader></phood-loader>
+        </div>
+        <div ng-if="(loadingState == 'NoData')">
+            No log data.
+        </div>
+        <div ng-if="(loadingState == 'Error')">
+            An error has occurred while retrieving logs.
+        </div>
+    </div>
+</div>

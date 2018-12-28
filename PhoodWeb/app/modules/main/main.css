@@ -1,0 +1,30 @@
+.col-main {
+	width: 50%;
+	height: 100%;
+	float: left;
+	text-align: center;
+}
+
+.main-button {
+	position: relative;
+	width: 40vw;
+	height: 40vw;
+	max-height: 500px;
+	max-width: 500px;
+	top: 12.5%;
+}
+
+.main-glyphicon{
+	font-size: 14vw;
+	margin-bottom: 20px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 400px) {
+	.manager, .tracker {
+		width: 35vw;
+		height: 35vw;
+    }
+	.glyphicon{
+		font-size: 12vw;
+	}
+  }

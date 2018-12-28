@@ -1,0 +1,13 @@
+.zero-waste-container {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.log-table {
+    width: 100%;
+    font-size: 15px;
+}
+
+.active > .log-pill {
+    background-color: #707070 !important;
+}

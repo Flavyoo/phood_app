@@ -1,0 +1,53 @@
+<div ng-init="init()" class="full-height">
+    <div ng-show="isAdmin">
+        <md-input-container>
+            <label>Organization</label>
+            <md-select ng-model="selectedOrganization" ng-change="onOrganizationChange(selectedOrganization)">
+                <md-option ng-repeat="org in organizations" ng-value="org">{{org.name}}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-tabs class="full-height">
+        <md-tab layout-padding label="General">
+            <config-loss-reason loss-reasons="lossReasons" selected-organization="selectedOrganization"></config-loss-reason>
+            <manage-user loss-reasons="lossReasons" organization-users="organizationUsers" selected-organization="selectedOrganization" locations="locations" is-admin="isAdmin"></manage-user>
+        </md-tab>
+
+        <md-tab label="Locations">
+            <config-location selected-organization="selectedOrganization" locations="locations"></config-location>
+        </md-tab>
+
+        <md-tab label="Manage Location" ng-show="locations.length > 0">
+            <div layout-padding layout-gt-sm="row">
+                <md-input-container>
+                    <label>Location</label>
+                    <md-select ng-model="selectedLocation" aria-label="Selected Location">
+                        <md-option ng-repeat="loc in locations" ng-value="loc">{{loc.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <config-station selected-location="selectedLocation" stations="stations"></config-station>
+            <br>
+
+            <md-tabs class="full-height">
+                <md-tab label="Pans">
+                    <config-pan selected-organization="selectedOrganization"></config-pan>
+                </md-tab>
+        
+                <md-tab label="Menu Editor">
+                    <menu-editor selected-location="selectedLocation" stations="stations"></menu-editor>
+                </md-tab>
+        
+                <md-tab label="Recurring Items">
+                    <config-recurring-item selected-location="selectedLocation"></config-recurring-item>
+                </md-tab>
+            </md-tabs>
+        </md-tab>
+
+        <md-tab label="Menu Upload">
+            <menu-uploader selected-organization="selectedOrganization"></menu-uploader>
+        </md-tab>
+    </md-tabs>
+</div>

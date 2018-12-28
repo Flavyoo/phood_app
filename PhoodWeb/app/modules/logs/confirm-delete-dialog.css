@@ -1,0 +1,28 @@
+.confirm {
+    width: 30%;
+    font-size: 20px;
+    height: 50px;
+}
+
+.cancel {
+    font-size: 20px;
+    width: 30%;
+    height: 50px;
+}
+
+.confirm-delete-dialog {
+    font-family: Lato !important;
+    background: transparent;
+}
+
+.confirm-delete-confirmation-message, .confirm-delete-actions {
+    background: white;
+}
+
+md-button i {
+    font-size: 20px;
+}
+
+.confirm-delete-close {
+    font-size: 20px;
+}

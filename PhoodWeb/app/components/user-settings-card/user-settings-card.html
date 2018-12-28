@@ -1,0 +1,54 @@
+<div flex>
+    <!-- NOTE: Any time a new user setting is added, this page needs to be updated -->
+    <!-- TODO: Have endpoint set up that returns the list of user settings -->
+    <!-- That way, we can dynamically populate this page so that every setting added isn't a breaking change -->
+    <!-- The backend requires that no field be null when posted up-->
+    <div layout-padding>
+        <label>
+            <input type="checkbox" ng-model="userSettings.showShortageLogs" class="margin-right-10"/>Show Shortage Logs
+        </label>
+        <label>
+            <input type="checkbox" ng-model="userSettings.showProductionDetails" class="margin-right-10"/>Show Production Details
+        </label>
+        <label>
+            <input type="checkbox" ng-model="userSettings.showCost" class="margin-right-10"/>Show Cost
+        </label>
+        <label>
+            <input type="checkbox" ng-model="userSettings.showPreConsumer" class="margin-right-10"/>Show Pre Consumer
+        </label>
+        <label>
+            <input type="checkbox" ng-model="userSettings.showPostConsumer" class="margin-right-10"/>Show Post Consumer
+        </label>
+        <label>
+            <input type="checkbox" ng-model="userSettings.hasTwoPageTracker" class="margin-right-10"/>Enable Two-Page Tracker
+        </label>
+    </div>
+
+    <div layout="row">
+        <md-input-container class="md-block" flex>
+            <label>Default Action</label>
+    
+            <md-select ng-model="userSettings.defaultAction" aria-label="Default Action">
+                <md-option ng-repeat="action in actionList" ng-value="action.name">{{action.name}}</md-option>
+            </md-select>
+        </md-input-container>
+    
+        <md-input-container class="md-block" flex>
+            <label>Default Loss Reason</label>
+    
+            <md-select ng-model="userSettings.defaultLossReason" aria-label="Default Loss Reason">
+                <md-option ng-repeat="reason in lossReasonList" ng-value="reason.name">{{reason.name}}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div layout="row">
+        <md-button class="phood-gray" ng-click="cancelUpdateSettings()">
+            Cancel
+        </md-button>
+    
+        <md-button class="phood-blue" ng-click="fireUpdateSettingsEvent()">
+            Save
+        </md-button>
+    </div>
+</div>

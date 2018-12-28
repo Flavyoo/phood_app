@@ -1,0 +1,5 @@
+<md-chips ng-model="stations" md-transform-chip="newStation($chip)" name="station" md-on-add="addStation($chip)" md-on-remove="deleteStation($chip.id)" placeholder="Enter a station...">
+    <md-chip-template>
+        <strong>{{$chip.name}}</strong>
+    </md-chip-template>
+</md-chips>

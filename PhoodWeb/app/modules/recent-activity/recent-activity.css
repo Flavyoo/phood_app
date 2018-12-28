@@ -1,0 +1,16 @@
+.recent-activity-table {
+    width: 100%;
+    text-align: center;
+}
+
+.newLog {
+    color: green;
+}
+
+.warningLog {
+    color: orange;
+}
+
+.oldLog {
+    color: red;
+}

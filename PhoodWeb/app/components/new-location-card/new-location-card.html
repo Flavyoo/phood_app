@@ -1,0 +1,33 @@
+<md-card layout-padding>
+  <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex>
+            <label>Name</label>
+            <input ng-model="newLocation.name" required>
+        </md-input-container>
+    
+        <md-input-container class="md-block" flex>
+            <label>Alias</label>
+            <input ng-model="newLocation.alias">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+            <label>Timezone Offset</label>
+            <input ng-model="newLocation.timezoneOffset" type="number">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+            <label>Active</label>
+            <input ng-model="newLocation.active" type="checkbox">
+        </md-input-container>
+  </div>
+
+  <div layout="row">
+    <md-button ng-click="cancelAddLocation()">
+        Cancel
+    </md-button>
+
+    <md-button class="phood-blue" ng-click="addLocation()">
+        Save
+    </md-button>
+  </div>
+</md-card>

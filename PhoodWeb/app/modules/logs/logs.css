@@ -1,0 +1,56 @@
+.location-checkboxes {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.log-table {
+	width: 100%;
+	font-size: 15px;
+	text-align: center;
+}
+
+.table-header {
+	font-size: 15px !important;
+	text-align: center;
+}
+
+td {
+	vertical-align: middle !important;
+}
+
+.twoColumns {
+}
+
+.pagination-sm{
+	width: 100%;
+}
+
+.zeroWastePagination {
+	margin-top: 0 !important;
+}
+
+.log-totals-table {
+	width: 40%;
+	float: right;
+	text-align: center;
+}
+
+.totalBody > tr:last-child{
+	background-color: #f2f2f2;
+}
+
+.height-36 {
+	height: 36px;
+}
+
+.log-filter {
+	margin-bottom: 0;
+}
+
+.max-height-50 {
+	max-height: 50px;
+}
+
+.log-date-filter-label {
+	right: 0 !important;
+}

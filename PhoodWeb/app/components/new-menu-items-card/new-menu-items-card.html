@@ -1,0 +1,39 @@
+<md-card layout-padding>
+  <div layout="row" ng-repeat="newItem in newItems">
+      <md-input-container class="md-block" required flex>
+          <label>Item Name</label>
+          <input ng-model="newItem.name" md-autofocus>
+      </md-input-container>
+  
+      <md-input-container class="md-block" flex>
+          <label>Station</label>
+
+          <md-select ng-model="newItem.station" md-autofocus>
+              <md-option ng-repeat="station in stations" ng-value="station">{{station.name}}</md-option>
+          </md-select>
+      </md-input-container>
+
+      <md-input-container class="md-block" flex>
+          <label>Meal</label>
+          <md-select ng-model="newItem.meal" required md-autofocus>
+              <md-option ng-repeat="meal in meals" ng-value="meal">{{meal}}</md-option>
+          </md-select>
+      </md-input-container>
+  </div>
+  
+  <div>
+    <md-button class="phood-blue" ng-click="addItemField()">
+        Add additional item
+    </md-button>
+  </div>
+
+  <div>
+      <md-button ng-click="cancelAddItems()">
+          Cancel
+      </md-button>
+    
+      <md-button name="addItemButton" class="phood-blue" ng-click="addItems()">
+          Save Items
+      </md-button>
+  </div>
+</md-card>

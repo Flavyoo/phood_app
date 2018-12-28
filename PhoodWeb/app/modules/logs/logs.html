@@ -1,0 +1,226 @@
+<div class="md-padding ngCloak" ng-init="init()">
+	<div layout="row" ng-show="showShortages()">
+		<ul class="nav nav-pills">
+			<li class="active"><a ui-sref="logs" class="log-pill">Waste Logs</a></li>
+			<li><a ui-sref="zeroWaste" class="log-pill">Shortage Logs (Beta)</a></li>
+		</ul>
+	</div>
+
+	<div layout="row" ng-show="!isTracker">
+		<div layout="column" flex>
+			<div layout-gt-md="row" layout-lt-lg="column">
+				<md-input-container class="log-filter">
+					<label hide-sm hide-xs class="log-date-filter-label">Start Date</label>
+					<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+				</md-input-container>
+
+				<md-input-container class="log-filter">
+					<label hide-sm hide-xs class="log-date-filter-label">End Date</label>
+					<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
+				</md-input-container>
+			</div>
+
+			<div layout-gt-md="row" layout-lt-lg="column">
+				<md-input-container class="log-filter">
+					<label hide-sm hide-xs>Locations</label>
+
+					<md-select ng-model="selectedLocations" multiple>
+						<md-optgroup label="Locations">
+							<md-option ng-value="location.name" ng-repeat="location in locations">{{location.name}}</md-option>
+						</md-optgroup>
+					</md-select>
+				</md-input-container>
+
+				<md-input-container class="log-filter">
+					<label hide-sm hide-xs>Actions</label>
+
+					<md-select ng-model="selectedActions" multiple>
+						<md-optgroup label="Actions">
+							<md-option ng-value="action.name" ng-repeat="action in actions">{{action.name}}</md-option>
+						</md-optgroup>
+					</md-select>
+				</md-input-container>
+			</div>
+
+			<div layout="row" class="max-height-50">
+				<md-button class="phood-blue height-36" ng-click="showSearch = !showSearch; showQuantity = false;" aria-label="Search">
+					<i class="fa fa-search"></i>
+				</md-button>
+
+				<md-input-container class="log-filter" ng-show="showSearch" flex-gt-xs>
+					<label>Item</label>
+					<input ng-model="item">
+				</md-input-container>
+
+				<md-button class="phood-blue height-36" ng-click="showQuantity = !showQuantity; showSearch = false;" aria-label="Filter Quantity">
+					Filter Quantity
+				</md-button>
+
+				<md-input-container class="log-filter" ng-show="showQuantity">
+					<label>Minimum Quantity</label>
+					<input ng-model="minimum" type="number" min="0">
+				</md-input-container>
+
+			</div>
+		</div>
+
+		<div layout="column" flex="40">
+			<div layout-gt-md="row" layout-lt-lg="column">
+				<md-button id="showTotalsTableButton" class="phood-blue" ng-click="showTotals()" aria-label="Show Totals">Show Totals Table</md-button>
+				<md-button class="phood-blue" ng-click="exportCSV()" aria-label="Export CSV">Export CSV</md-button>
+			</div>
+
+			<div layout="row">
+				<table class="table table-striped table-bordered" ng-show="showTotalsTable">
+					<thead>
+						<tr>
+							<th class="table-header">Location</th>
+							<th class="table-header">Pounds</th>
+							<th class="table-header">Entries</th>
+						</tr>
+					</thead>
+
+					<tbody class="totalBody">
+						<tr ng-repeat="location in locationTotals">
+							<td class="text-center">{{location.name}}</td>
+							<td class="text-center">{{location.pound}}</td>
+							<td class="text-center">{{location.entries}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div layout="row" flex>
+		<div layout="column" flex>
+			<div layout="row">
+				<pagination total-items="totalItems" ng-model="currentPage"
+							max-size="20" items-per-page="numPerPage" page="currentPage"
+							boundary-links="true" class="pagination-sm">
+				</pagination>
+			</div>
+
+			<div layout="row">
+				<table class="table table-striped table-hover table-bordered log-table">
+					<thead>
+						<tr>
+							<th class="table-header">
+								<a href="#" ng-click="sort('loggedTime')">
+									Date Discarded
+									<span ng-show="sortType == 'loggedTime' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'loggedTime' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+							<th class="table-header">Date Produced</th>
+							<th ng-show="!isTracker" class="table-header">Location</th>
+							<th class="table-header">
+								<a href="#" ng-click="sort('itemName')">
+									Item
+									<span ng-show="sortType == 'itemName' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'itemName' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+
+							<th class="table-header">
+								<a href="#" ng-click="sort('quantity')">
+									Quantity
+									<span ng-show="sortType == 'quantity' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'quantity' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+
+							<th class="table-header" ng-show="user.settings.showCost">
+								<a href="#" ng-click="sort('valueActioned')">
+									Value
+									<span ng-show="sortType == 'valueActioned' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'valueActioned' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+
+							<th class="table-header" ng-show="user.settings.showCost">
+								<a href="#" ng-click="sort('portionsActioned')">
+									Portions
+									<span ng-show="sortType == 'portionsActioned' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'portionsActioned' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+
+							<th class="table-header">
+								<a href="#" ng-click="sort('actionTaken')">
+									Action
+									<span ng-show="sortType == 'actionTaken' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'actionTaken' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+							<th class="table-header">
+								<a href="#" ng-click="sort('actionReason')">
+									Reason
+									<span ng-show="sortType == 'actionReason' && !sortReverse" class="fa fa-caret-down"></span>
+									<span ng-show="sortType == 'actionReason' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</th>
+							<th ng-show="displayProductionDetails" class="table-header">
+								Production Details
+							</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<div ng-if="(loadingState =='Ready')">
+							<tr ng-repeat="obj in objects
+													| filter : filterQ | filter: filterLocation | filter: filterItem
+													| filter: filterStart | filter: filterEnd | filter: filterAction
+													| orderBy: sortType : sortReverse
+													| startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
+
+								<td>{{obj.timeStamp | reorderTime: obj }}</td>
+
+								<td ng-show="user.location.id == obj.locationId"><a href="#" editable-date="obj.dateProduced" onaftersave="edit(obj)">{{obj.dateProduced | showDay : obj.dateProduced }}</a></td>
+								<td ng-show="user.location.id != obj.locationId">{{obj.dateProduced | showDay : obj.dateProduced }}</td>
+
+								<td ng-show="!isTracker">{{obj.locationName}}</td>
+
+								<!-- We want editable-text and onaftersave to show only if it's your dining location -->
+								<td ng-show="user.location.id == obj.locationId"><a href="#" editable-text="obj.itemName" onaftersave="edit(obj)">{{obj.itemName || 'empty'}}</a></td>
+								<td ng-show="user.location.id != obj.locationId">{{obj.itemName || 'empty'}}</td>
+
+								<td ng-show="user.location.id == obj.locationId">
+									<a href="#" e-step="any" editable-number="obj.quantity" onaftersave="edit(obj)">{{obj.quantity}} {{obj.unit}}</a>
+								</td>
+
+								<td ng-show="user.location.id != obj.locationId">{{obj.quantity}} {{obj.unit}}</td>
+
+								<td ng-show="user.settings.showCost">${{obj.valueActioned}}</td>
+
+								<td ng-show="user.settings.showCost">{{obj.portionsActioned}}</td>
+
+								<td ng-show="user.location.id == obj.locationId"><a href="#" editable-select="obj.actionTaken" e-ng-options="s for s in logActions" onaftersave="edit(obj)">{{obj.actionTaken}}</a></td>
+								<td ng-show="user.location.id != obj.locationId">{{obj.actionTaken}}</td>
+
+								<td ng-show="user.location.id == obj.locationId"><a href="#" editable-select="obj.actionReason" e-ng-options="r for r in lossReasons" onaftersave="edit(obj)">{{obj.actionReason}}</a></td>
+								<td ng-show="user.location.id != obj.locationId">{{obj.actionReason}}</td>
+
+								<td ng-show="displayProductionDetails">{{obj.productionDetails}}</td>
+
+								<td><button type="submit" ng-disabled="locationId != obj.locationId" ng-click="delete(obj)" class="btn btn-sm btn-danger">X</button></td>
+							</tr>
+						</div>
+					</tbody>
+				</table>
+			</div>
+
+			<div layout="row">
+				<div ng-if="(loadingState == 'Loading')">
+					<phood-loader></phood-loader>
+				</div>
+				<div ng-if="(loadingState == 'NoData') && (!isTracker)">
+					There are no logs for the given time frame.
+				</div>
+				<div ng-if="(loadingState == 'Error')">
+					An error has occurred while retrieving log data.
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,41 @@
+<div layout-padding>
+    <div layout-gt-sm="row">
+        <md-button class="phood-blue" ng-click="toggleAddUserCard()">Add User</md-button>
+    </div>
+
+    <new-user-card ng-show="isAddUserActive" account-list="organizationUsers" is-primary="false"></new-user-card>
+
+    <table class="table table-striped table-hover table-bordered" flex>
+        <thead>
+            <tr>
+                <th class="table-header">User</th>
+                <th class="table-header">Email</th>
+                <th class="table-header">Contact name</th>
+                <th class="table-header">Role</th>
+                <th class="table-header">Active</th>
+                <th class="table-header">Change Password</th>
+                <th class="table-header">Manage Roles</th>
+                <th class="table-header">Manage Settings</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <tr ng-repeat="user in organizationUsers | filter: isSelectedUser">
+                <!-- TODO: Change the filter to only hide all following rows -->
+                <td align="center">{{user.displayName || 'empty'}}</a></td>
+                <td align="center"><a href="#" editable-email="user.email" onaftersave="editUser(user)">{{user.email || '[None]'}}</a></td>
+                <td align="center"><a href="#" editable-text="user.contactName" onaftersave="editUser(user)">{{user.contactName || '[None]'}}</a></td>
+                <td align="center">{{user.parentId ? 'Secondary' : 'Primary'}}</td>
+                <td align="center"><a href="#" editable-checkbox="user.active" onaftersave="setActive(user)">{{user.active}}</a></td>
+
+                <td align="center"><md-button class="phood-blue" ng-click="togglePasswordResetCard(user)">Reset Password</md-button></td>
+                <td align="center"><md-button class="phood-blue" ng-click="toggleUserRolesCard(user)">Manage Roles</md-button></td>
+                <td align="center"><md-button class="phood-blue" ng-click="toggleUserSettingsCard(user)">Manage Settings</md-button></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <password-reset-card ng-show="showPasswordResetCard" is-admin="isAdmin"></password-reset-card>
+    <user-roles-card ng-show="showUserRolesCard" user-roles="userRoles" selected-organization="selectedOrganization" locations="locations"></user-roles-card>
+    <user-settings-card ng-show="showUserSettingsCard" loss-reason-list="lossReasons" action-list="actionList" current-user-settings="currentUserSettings"></user-settings-card>
+</div>
