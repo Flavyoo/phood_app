@@ -50,10 +50,13 @@
 </template>
 
 <script>
+
 import GenericInput from '@/components/Input.vue'
 import PasswordInput from '@/components/PasswordInput.vue'
+import AuthService from '@/services/phood-api-services/authentication.js'
 
-import axios from 'axios'
+const API_ENDPOINT = 'https://api.test.phoodsolutions.com'
+const SUCCESS = 200
 
 export default {
     name: "LoginForm",
@@ -104,33 +107,25 @@ export default {
                                    : "Dont have an account?";
             this.formHeader = !this.signingUp ? this.loginHeader : "Get Started";
         },
-        handleLogin: function () {
-            // Make a request to the Okta API to sign the user in.
-            const apiEndpoint = 'https://dev-127892.oktapreview.com/api/v1/authn/'
-            axios.post(apiEndpoint, {
-                username: this.username,
-                password: this.password,
-                options: {
-                    multiOptionalFactorEnroll: false,
-                    warnBeforePasswordExpired: false
-                },
-            },{
-                responseType: 'json',
-            }).then( response => {
-                if (response.status === 200) {
-                    this.$auth.loginRedirect('/account', {
-                        sessionToken: response.data.sessionToken
-                    });
-                } else {
-                    this.errorMessage = "Something went wrong, "
-                                        + "check your username or password."
-                }
-             }).catch(function (error) {
-                 /* eslint-disable no-console */
-                 console.log(error)
-                 this.errorMessage = "Something went wrong, "
-                                     + "check your username or password."
-            });
+        async handleLogin() {
+            const authService = new AuthService(API_ENDPOINT)
+            const response = await authService.login('/auth/login', this.username, this.password)
+            if (response.status == SUCCESS) {
+                const user = response.data.user
+                user.roles = response.data.roles
+
+                const userPayload = { activeUser: user }
+                const payload = { sessionId: response.headers.authorization }
+
+                this.$store.dispatch('login', payload)
+                this.$store.dispatch('saveUser', userPayload)
+
+                // go to account page
+                this.$router.push({path: 'about'})
+
+            } else {
+                this.errorMessage = response.unAuthorizedError
+            }
             return;
         },
         handleSignUp: function () {

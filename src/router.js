@@ -2,16 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import LoginView from '@/views/LoginView.vue'
-import Auth from '@okta/okta-vue'
 import UserAccount from '@/views/Account'
-import {CLIENT_ID, REDIRECT_URI, SCOPE} from './consts'
-
-Vue.use(Auth, {
-  issuer: 'https://dev-127892.oktapreview.com/oauth2/default',
-  client_id: CLIENT_ID,
-  redirect_uri: REDIRECT_URI,
-  scope: SCOPE
-})
 
 Vue.use(Router)
 
@@ -28,10 +19,6 @@ let router = new Router({
       path: '/login',
       name: 'login-view',
       component: LoginView
-    },
-    {
-      path: '/implicit/callback',
-      component: Auth.handleCallback()
     },
     {
       path: '/account',

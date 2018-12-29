@@ -6,37 +6,43 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
       userIsLoggedIn: false,
-      activeUser: null
+      activeUser: null,
+      sessionId: null
   },
   mutations: {
+      login (state, payload) {
+          state.sessionId = payload.sessionId
+      },
       saveUser (state, payload) {
           state.activeUser = payload.activeUser
       },
       logout (state) {
+          state.sessionId = null
           state.userIsLoggedIn = false
-      },
-      authenticate (state, payload) {
-          state.userIsLoggedIn = payload.isLoggedIn
       }
   },
   actions: {
+      login ({commit}, payload) {
+          commit('login', payload)
+      },
       saveUser ({commit}, payload) {
           commit('saveUser', payload)
       },
       logout ({commit}) {
           commit('logout')
-      },
-      authenticate ({commit}, payload) {
-          commit('authenticate', payload)
       }
   },
   getters: {
       isAuthenticated: state => {
-          return state.userIsLoggedIn
+          if (state.sessionId != null) {
+              return true
+          } else {
+              return false
+          }
       },
-      getGivenName: state => {
+      getContactName: state => {
           if (state.activeUser != null) {
-              return state.activeUser.given_name
+              return state.activeUser.contactName
           } else {
               return ''
           }
